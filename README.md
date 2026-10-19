@@ -1,3 +1,7 @@
+
+
+
+
 # 🏔️ Filled Function Methods in Global Optimization
 
 Welcome to my repository on **Filled Function Methods (FFM)**. This page is dedicated to exploring deterministic approaches for escaping local minima in continuous global optimization, highlighting theoretical evolution, handling real-world engineering constraints, and showcasing recent academic research.
@@ -128,23 +132,36 @@ $$
 To truly understand the power of the Filled Function Method, we can visualize its step-by-step behavior on a highly multimodal landscape. 
 
 ### The Objective Function Landscape
-Let's define a non-convex objective function $f(x)$ characterized by multiple challenging valleys (local minima). Traditional gradient-based algorithms would immediately get trapped in the first valley they encounter. 
+Let's define a non-convex objective function $f(x)$ constructed using inverse quadratic terms to create multiple challenging valleys (local minima). The function is defined as:
 
-As seen below, the function has several shallow basins, with the true **Global Optimum** hiding in the deepest basin on the far right[cite: 46].
+$$
+f(x) = 4 - \sum_{i=1}^{4} \frac{a_i}{1 + (x - b_i)^2}
+$$
 
-![Objective Function Landscape](pic1.eps)
-*(Note: Ensure the image file is uploaded to your repository and the path is correct.)*
+where the parameters are $a = \{7, 3, 5, 9\}$ and $b = \{-5, 0, 3, 12\}$. 
+
+Traditional gradient-based algorithms would immediately get trapped in the first valley they encounter. As seen below, the function has several shallow basins, with the true **Global Optimum** hiding in the deepest basin on the far right.
+
+<div align="center">
+  <img width="796" height="601" alt="Objective Function Landscape" src="https://github.com/user-attachments/assets/00d01702-578e-4917-8b73-dd06b0e52747" />
+</div>
 
 ### The Iterative Escape (The Story of $P_4$)
-To demonstrate how a filled function mathematically forces an algorithm to escape these traps, we apply **The One-Parameter Model ($P_4$)** by Şahiner et al. (2025). The algorithm dynamically alters the landscape to "fill" the current basin and push the search towards a better one[cite: 47].
+To demonstrate how a filled function mathematically forces an algorithm to escape these traps, we apply **The One-Parameter Model ($P_4$)** by Şahiner et al. (2025). The algorithm dynamically alters the landscape to "fill" the current basin and push the search towards a better one.
 
-![Filled Function Iterations](pic2.eps)
+<div align="center">
+ <img width="1281" height="1136" alt="pic22" src="https://github.com/user-attachments/assets/5583c574-ccbf-43f0-9550-91b0cddc9f5c" />
+</div>
 
-Here is the narrative of the algorithm's journey[cite: 47]:
-* **Iteration 1:** The search begins and gets trapped at a shallow local minimum near $x = 0$[cite: 47]. The algorithm constructs the filled function $P(x)$ (the orange line), which peaks exactly at this point, effectively inverting the valley into a hill to force the search out[cite: 47].
-* **Iteration 2:** Escaping the first trap, the algorithm falls into a slightly better local minimum near $x = 3$[cite: 47]. A new $P(x)$ is constructed to fill this new basin[cite: 47].
-* **Iteration 3:** The search is pushed further down into a much deeper minimum on the left side ($x = -5$)[cite: 47]. Once again, the filled function masks this basin[cite: 47].
-* **Iteration 4:** Driven by the deterministic mechanics of $P(x)$, the algorithm finally reaches the absolute lowest point—the **Global Minimum** near $x = 12$[cite: 47].
+**The Magic of the Reference Line (Dashed Line):**
+Notice the gray dashed line in each iteration. This represents the current function value $f(x_k^\ast)$. The brilliance of the Filled Function Method lies here: **any local minimum sitting above this dashed line becomes entirely invisible (unresponsive) to the algorithm.** The algorithm strictly masks out inferior regions and only allows the search to fall into basins that are strictly deeper than the current one.
 
-**A Note on Algorithmic Efficiency:** 
-*This specific 4-step sequence is designed to visually demonstrate the fundamental concept of "basin filling." In a real-world execution, the algorithm does not strictly require this exact sequential path; it dynamically navigates the landscape based on its starting point and can often locate the global optimum in fewer iterations. The core guarantee is its deterministic ability to consistently move to a lower basin until the global minimum is found.*
+Here is the narrative of the algorithm's journey:
+* **Iteration 1:** The search begins and gets trapped at a shallow local minimum near $x = 0$. The algorithm constructs the filled function $P_4(x)$ (the orange line), which peaks exactly at this point, effectively inverting the valley into a hill. Notice how the basin at $x=3$ is completely masked because it is higher than our dashed reference line. The algorithm is mathematically forced to slide left into a deeper valley.
+* **Iteration 2 (Educational Scenario):** *For demonstration purposes*, imagine the search fell into the local minimum near $x = 3$. A new $P_4(x)$ is constructed to fill this specific basin. The dashed line drops, and the algorithm is pushed out again.
+* **Iteration 3:** The search is pushed further down into a much deeper minimum on the left side ($x = -5$). The dashed line drops significantly. Once again, the filled function masks this basin, and because all central basins are now above the dashed line, they remain flat (unresponsive). The algorithm has no choice but to look elsewhere.
+* **Iteration 4:** Driven by the deterministic mechanics of $P_4(x)$, the algorithm is guided to the absolute lowest point—the **Global Minimum** near $x = 12$.
+
+**A Note on Algorithmic Flexibility:** 
+*This specific 4-step sequence is a didactic scenario designed to visually demonstrate the fundamental concept of "basin filling" and "masking." In a real-world execution, the algorithm does not strictly require this exact, sequential zigzag path. Depending on the initial starting point, the gradient flow, and the specific auxiliary function used, the algorithm might locate the global optimum in just one or two iterations. The absolute guarantee of the FFM is its deterministic ability to consistently reject higher local minima and move to a lower basin until the global minimum is found.
+
