@@ -1,13 +1,10 @@
-function [func, lb, ub, f_true, name] = benchmark(pn, n_dim, app)
+function [func, lb, ub, f_true, name] = benchmark(pn, n_dim)
     % BENCHMARK Global optimization test functions library
-    %   [func, lb, ub, f_true, name] = benchmark(pn, n_dim, app)
-    %   Provides 41 continuous and sequential test functions.
+    %   [func, lb, ub, f_true, name] = benchmark(pn, n_dim)
+    %   Provides 41 continuous, standalone, and sequential test functions.
 
     if nargin < 2
         n_dim = 2; % Default dimension
-    end
-    if nargin < 3
-        app = []; % Optional app handle for external function calls
     end
 
     n = n_dim;
@@ -54,7 +51,7 @@ function [func, lb, ub, f_true, name] = benchmark(pn, n_dim, app)
             
         case 8
             if n_dim ~= 2, error('Error (pn=8): Dimension must be 2.'); end
-            func = @(x) app.Shubert_func(x); 
+            func = @(x) shubert_local(x); 
             lb = -10; ub = 10; f_true = -186.7309; name = 'Shubert I';
             
         case 9
@@ -104,7 +101,7 @@ function [func, lb, ub, f_true, name] = benchmark(pn, n_dim, app)
             
         case 18
             name = sprintf('Ackley (%dD)', n_dim);
-            func = @(x) app.Ackley_func(x, n_dim); 
+            func = @(x) ackley_local(x, n_dim); 
             lb = -15; ub = 15; f_true = 0;
             
         case 19
@@ -114,12 +111,12 @@ function [func, lb, ub, f_true, name] = benchmark(pn, n_dim, app)
             
         case 20
             name = sprintf('Sine-Squared (%dD)', n_dim);
-            func = @(x) app.SineSquared_func(x, n_dim); 
+            func = @(x) sum(sin(x).^2); 
             lb = -10; ub = 10; f_true = 0;
             
         case 21
             if n_dim ~= 3, error('Error (pn=21): Dimension must be 3.'); end
-            func = @(x) app.Hartman3_func(x); 
+            func = @(x) hartman3_local(x); 
             lb = 0; ub = 1; f_true = -3.86278; name = 'Hartman 3';
             
         case 22
@@ -132,42 +129,42 @@ function [func, lb, ub, f_true, name] = benchmark(pn, n_dim, app)
             if n_dim ~= 4, error('Error (pn=23): Dimension must be 4.'); end
             name = 'Perm (4D)';
             b = 0.5;
-            func = @(x) app.Perm_func(x, n, b); 
+            func = @(x) perm_local(x, n, b); 
             lb = -4; ub = 4; f_true = 0;
             
         case 24
             if n_dim ~= 4, error('Error (pn=24): Dimension must be 4.'); end
             name = 'Power Sum (4D)';
             b = [8, 18, 44, 114];
-            func = @(x) app.PowerSum_func(x, n, b); 
+            func = @(x) powersum_local(x, n, b); 
             lb = 0; ub = 4; f_true = 0;
             
         case 25
             if n_dim ~= 4, error('Error (pn=25): Dimension must be 4.'); end
             m = 5; f_true = -10.1532; name = 'Shekel (m=5)';
-            func = @(x) app.Shekel_func(x, m); 
+            func = @(x) shekel_local(x, m); 
             lb = 0; ub = 10; 
             
         case 26
             if n_dim ~= 4, error('Error (pn=26): Dimension must be 4.'); end
             m = 7; f_true = -10.4029; name = 'Shekel (m=7)';
-            func = @(x) app.Shekel_func(x, m); 
+            func = @(x) shekel_local(x, m); 
             lb = 0; ub = 10; 
             
         case 27
             if n_dim ~= 4, error('Error (pn=27): Dimension must be 4.'); end
             m = 10; f_true = -10.5364; name = 'Shekel (m=10)';
-            func = @(x) app.Shekel_func(x, m); 
+            func = @(x) shekel_local(x, m); 
             lb = 0; ub = 10; 
             
         case 28
             if n_dim ~= 6, error('Error (pn=28): Dimension must be 6.'); end
-            func = @(x) app.Hartman6_func(x); 
+            func = @(x) hartman6_local(x); 
             lb = 0; ub = 1; f_true = -3.322368; name = 'Hartman 6';
             
         case 29
             name = sprintf('Griewank (%dD)', n_dim);
-            func = @(x) app.Griewank_func(x, n_dim); 
+            func = @(x) sum(x.^2)/4000 - prod(cos(x ./ sqrt(1:n_dim))) + 1; 
             lb = -600; ub = 600; f_true = 0;
             
         case 30
@@ -177,7 +174,7 @@ function [func, lb, ub, f_true, name] = benchmark(pn, n_dim, app)
             
         case 31
             if mod(n_dim, 4) ~= 0, error('Error (pn=31): Dimension must be a multiple of 4.'); end
-            func = @(x) app.Powell_func(x, n); 
+            func = @(x) powell_local(x, n); 
             lb = -4; ub = 5; f_true = 0; name = sprintf('Powell (%dD)', n_dim);
             
         case 32
@@ -218,7 +215,7 @@ function [func, lb, ub, f_true, name] = benchmark(pn, n_dim, app)
             
         case 39
             name = sprintf('Asym. Ackley (%dD)', n_dim);
-            func = @(x) app.Ackley_func(x, n_dim); 
+            func = @(x) ackley_local(x, n_dim); 
             lb = -10; ub = 15; f_true = 0;
             
         case 40
@@ -233,5 +230,87 @@ function [func, lb, ub, f_true, name] = benchmark(pn, n_dim, app)
             
         otherwise
             error('Error: Problem ID %d not found.', pn);
+    end
+end
+
+% =========================================================================
+% LOCAL FUNCTIONS FOR COMPLEX BENCHMARKS
+% =========================================================================
+
+function f = shubert_local(x)
+    sum1 = 0; sum2 = 0;
+    for i = 1:5
+        sum1 = sum1 + i * cos((i+1)*x(1) + i);
+        sum2 = sum2 + i * cos((i+1)*x(2) + i);
+    end
+    f = sum1 * sum2;
+end
+
+function f = ackley_local(x, n_dim)
+    f = -20 * exp(-0.2 * sqrt(sum(x.^2)/n_dim)) - exp(sum(cos(2*pi*x))/n_dim) + 20 + exp(1);
+end
+
+function f = hartman3_local(x)
+    a = [3 10 30; 0.1 10 35; 3 10 30; 0.1 10 35];
+    c = [1; 1.2; 3; 3.2];
+    p = [0.3689 0.1170 0.2673; 0.4699 0.4387 0.7470; 0.1091 0.8732 0.5547; 0.0381 0.5743 0.8828];
+    f = 0;
+    for i = 1:4
+        f = f - c(i) * exp(-sum(a(i,:) .* (x - p(i,:)).^2));
+    end
+end
+
+function f = perm_local(x, n_dim, b)
+    f = 0;
+    for i = 1:n_dim
+        sum_val = 0;
+        for j = 1:n_dim
+            sum_val = sum_val + (j^i + b) * ((x(j)/j)^i - 1);
+        end
+        f = f + sum_val^2;
+    end
+end
+
+function f = powersum_local(x, n_dim, b)
+    f = 0;
+    for i = 1:n_dim
+        sum_val = 0;
+        for j = 1:n_dim
+            sum_val = sum_val + x(j)^i;
+        end
+        f = f + (sum_val - b(i))^2;
+    end
+end
+
+function f = shekel_local(x, m)
+    a = [4 4 4 4; 1 1 1 1; 8 8 8 8; 6 6 6 6; 3 7 3 7; 
+         2 9 2 9; 5 5 3 3; 8 1 8 1; 6 2 6 2; 7 3.6 7 3.6];
+    c = [0.1; 0.2; 0.2; 0.4; 0.4; 0.6; 0.3; 0.7; 0.5; 0.5];
+    f = 0;
+    for i = 1:m
+        f = f - 1 / (sum((x - a(i,:)).^2) + c(i));
+    end
+end
+
+function f = hartman6_local(x)
+    a = [10 3 17 3.5 1.7 8; 0.05 10 17 0.1 8 14; 
+         3 3.5 1.7 10 17 8; 17 8 0.05 10 0.1 14];
+    c = [1; 1.2; 3; 3.2];
+    p = [0.1312 0.1696 0.5569 0.0124 0.8283 0.5886;
+         0.2329 0.4135 0.8307 0.3736 0.1004 0.9991;
+         0.2348 0.1451 0.3522 0.2883 0.3047 0.6650;
+         0.4047 0.8828 0.8732 0.5743 0.1091 0.0381];
+    f = 0;
+    for i = 1:4
+        f = f - c(i) * exp(-sum(a(i,:) .* (x - p(i,:)).^2));
+    end
+end
+
+function f = powell_local(x, n_dim)
+    f = 0;
+    for i = 1:(n_dim/4)
+        idx = 4*(i-1);
+        x1 = x(idx+1); x2 = x(idx+2); x3 = x(idx+3); x4 = x(idx+4);
+        f = f + (x1 + 10*x2)^2 + 5*(x3 - x4)^2 + (x2 - 2*x3)^4 + 10*(x1 - x4)^4;
     end
 end
