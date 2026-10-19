@@ -167,7 +167,25 @@ Here is the narrative of the algorithm's journey:
 
 ---
 
-## 🚀 6. Implementation & Usage Guide
+## ⚖️ 6. Advantages & Limitations of FFM
+
+Before diving into the computational implementation, it is crucial to summarize the theoretical strengths and inherent challenges of the Filled Function Method compared to traditional heuristic and local search algorithms.
+
+### Strengths (Advantages)
+* **Mathematical Rigor & Determinism:** Unlike stochastic methods (e.g., Genetic Algorithms, PSO), FFM relies on exact mathematical theorems. Its ability to escape local minima and converge toward the global optimum is theoretically provable.
+* **Strictly Monotonic Descent:** The algorithm mathematically guarantees that every new basin discovered will have a strictly lower objective function value than the previous one. The search process never regresses to a worse state.
+* **Dynamic Basin Masking:** The construction of the auxiliary function not only transforms the current trap into a peak but also structurally masks (renders unresponsive) all other shallower local minima, forcing the algorithm to focus only on deeper valleys.
+* **Low Computational & Memory Cost:** Because it relies on a single-point trajectory rather than a large population of agents, its memory (RAM) footprint and CPU load are extremely low. This is highly practical for complex engineering problems where function evaluations are expensive.
+* **High Local Precision:** By integrating with powerful gradient or Hessian-based local solvers (e.g., Quasi-Newton) during the local search stage, FFM pinpoints the exact bottom of every basin with exceptional mathematical precision.
+
+### Limitations (Disadvantages)
+* **Mathematical Transformation Side Effects (Basin Shrinking):** As seen in the visualizations above, constructing the auxiliary function can severely shrink the "basin of attraction" of deeper valleys. If the step size is not calibrated correctly, the algorithm might step over these narrowed basins entirely. Additionally, exponential terms can create wide, flat regions (gradient vanishing) where local solvers may stall.
+* **Curse of Dimensionality:** Escaping a basin heavily depends on the defined search directions during the global search step. As the problem dimensions increase, the number of potential search directions required to successfully find a lower basin grows exponentially, which can increase computational overhead.
+* **Strict Dependency on Local Solvers:** The overall success of FFM is directly tied to the performance of the underlying local search algorithm (e.g., `fminunc`) used throughout both the local minimization and basin-escaping steps. If the problem is highly noisy, discontinuous, or has overly rigid constraints that cause the local solver to fail, the core escape mechanism of the FFM will also be disrupted.
+
+---
+
+## 🚀 7. Implementation & Usage Guide
 
 While the theoretical illustrations above demonstrate the deterministic mechanics of basin-filling and masking, the true utility of the Filled Function Method lies in its computational application. 
 
