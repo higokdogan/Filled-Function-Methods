@@ -6,7 +6,7 @@ This repository is designed to be highly modular, separating the core optimizati
 
 The current active files in the repository are:
 
-* **`main.m`**: The primary execution script. Currently, it utilizes a standard coordinate-directional search strategy (Phase 1 Local Search + Phase 2 Basin Escaping). *Note: Additional search strategies (e.g., Space-filling curves, Sobol sequence directional searches) will be added as separate scripts in the future.*
+* **`main.m`**: The primary execution script. Currently, it utilizes a standard coordinate-directional search strategy (Phase 1 Local Search + Phase 2 Basin Escaping).
 * **`benchmark.m`**: A standalone library containing 41 continuous global optimization test functions (e.g., Rastrigin, Rosenbrock, Shekel, etc.). 
 * **`get_filled_function.m`**: The library of auxiliary filled functions (`P1` through `P6`). It mathematically constructs the peak to escape local minima.
 * **`FF_Simulation_P1_to_P6.m`**: A theoretical simulation script used to generate 2D visual landscapes of the basin-filling mechanics.
