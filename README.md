@@ -165,3 +165,12 @@ Here is the narrative of the algorithm's journey:
 **A Note on Algorithmic Flexibility:** 
 *This specific 4-step sequence is a didactic scenario designed to visually demonstrate the fundamental concept of "basin filling" and "masking." In a real-world execution, the algorithm does not strictly require this exact, sequential zigzag path. Depending on the initial starting point, the gradient flow, and the specific auxiliary function used, the algorithm might locate the global optimum in just one or two iterations. The absolute guarantee of the FFM is its deterministic ability to consistently reject higher local minima and move to a lower basin until the global minimum is found.
 
+---
+
+## 🚀 6. Implementation & Usage Guide
+
+While the theoretical illustrations above demonstrate the deterministic mechanics of basin-filling and masking, the true utility of the Filled Function Method lies in its computational application. 
+
+To facilitate academic replication, extensive benchmark testing, and the integration of novel search strategies, this repository has been structured with a strictly modular MATLAB architecture. Researchers can easily swap objective functions, apply different filled function formulations, and test various local search subroutines.
+
+For comprehensive instructions on how to initialize the test functions, configure the auxiliary parameters, and execute the core global optimization loops within your local environment, please refer to the **[Usage Guide](USAGE.md)**.
