@@ -192,3 +192,12 @@ While the theoretical illustrations above demonstrate the deterministic mechanic
 To facilitate academic replication, extensive benchmark testing, and the integration of novel search strategies, this repository has been structured with a strictly modular MATLAB architecture. Researchers can easily swap objective functions, apply different filled function formulations, and test various local search subroutines.
 
 For comprehensive instructions on how to initialize the test functions, configure the auxiliary parameters, and execute the core global optimization loops within your local environment, please refer to the **[Usage Guide](USAGE.md)**.
+
+
+## 📄 License
+
+This project is licensed under the **Creative Commons Attribution-NonCommercial 4.0 International License** (CC BY-NC 4.0).
+
+You are free to share and adapt this material for academic and non-commercial purposes, provided you give appropriate credit to the original author. Commercial use of these deterministic algorithms and code structures is strictly prohibited without prior permission. 
+
+For more details, see the [LICENSE](LICENSE) file or visit [Creative Commons](https://creativecommons.org/licenses/by-nc/4.0/).
